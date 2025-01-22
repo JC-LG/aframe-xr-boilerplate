@@ -1,3 +1,6 @@
+https://jc-lg.github.io/aframe-xr-boilerplate/
+
+
 xr-starter-kit
 =============
 

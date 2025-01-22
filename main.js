@@ -189,10 +189,13 @@ window.addEventListener("DOMContentLoaded", function() {
   const building = document.getElementById("building");
 
   // Once the building has loaded update the relfections
-  building.addEventListener('object3dset', function () {
-    if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
-  }, {once: true});
-  
+  if (building){
+    building.addEventListener('object3dset', function () {
+      if (this.components && this.components.reflection) this.components.reflection.needsVREnvironmentUpdate = true;
+    }, {once: true});
+
+  }
+
   const labels = Array.from(document.querySelectorAll('.pose-label'));
   for (const el of labels) {
     el.parentNode.addEventListener('pose', function (event) {
@@ -205,26 +208,28 @@ window.addEventListener("DOMContentLoaded", function() {
   
   watergun: {
     const watergun = document.getElementById("watergun");
-    const watergunSlider = watergun.firstElementChild;
-    watergun.addEventListener('grabbed', function (e) {
-      const by = e.detail.by;
-      if (e.target === watergun) {
-        watergun.className = '';
-        if (by.dataset.right) watergunSlider.className = 'magnet-left';
-        if (by.dataset.left) watergunSlider.className = 'magnet-right';
-      }
-      if (e.target === watergunSlider) {
-        watergun.setAttribute('linear-constraint', 'target', '#' + e.detail.byNoMagnet.id);
-      }
-    });
-    watergun.addEventListener('released', function (e) {
-      const by = e.detail.by;
-      watergun.setAttribute('linear-constraint', 'target', '');
-      if (e.target === watergun) {
-        watergun.className = 'magnet-right magnet-left';
-        watergunSlider.className = '';
-      }
-    });
+    const watergunSlider = watergun && watergun.firstElementChild;
+    if (watergun) {
+      watergun.addEventListener('grabbed', function (e) {
+        const by = e.detail.by;
+        if (e.target === watergun) {
+          watergun.className = '';
+          if (by.dataset.right) watergunSlider.className = 'magnet-left';
+          if (by.dataset.left) watergunSlider.className = 'magnet-right';
+        }
+        if (e.target === watergunSlider) {
+          watergun.setAttribute('linear-constraint', 'target', '#' + e.detail.byNoMagnet.id);
+        }
+      });
+      watergun.addEventListener('released', function (e) {
+        const by = e.detail.by;
+        watergun.setAttribute('linear-constraint', 'target', '');
+        if (e.target === watergun) {
+          watergun.className = 'magnet-right magnet-left';
+          watergunSlider.className = '';
+        }
+      });
+    }
   }
 
   // If the user taps on any buttons or interactive elements we may add then prevent
